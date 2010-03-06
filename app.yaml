@@ -1,0 +1,14 @@
+application: email-utils
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /_ah/mail/.+
+  script: mail.py 
+
+- url: .*
+  script: main.py
+
+inbound_services:
+- mail
