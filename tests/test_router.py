@@ -5,6 +5,8 @@ sys.path.append('/Applications/GoogleAppEngineLauncher.app/Contents/Resources/Go
 import logging
 import unittest
 
+from google.appengine.api.mail import EmailMessage, InboundEmailMessage
+
 from handlers import MailRouter
 from rpc import Logger
 
@@ -15,13 +17,10 @@ class TestEmailMessage(object):
     self.subject = subject
     self.body = body
 
-class TestEmailRouter(MailRouter):
-  pass
-    
 class TestMailRouter(unittest.TestCase):
   def setUp(self):
     logging.basicConfig(level=logging.DEBUG) # show all logging on STDOUT
-    self.mail_router = TestEmailRouter()
+    self.mail_router = MailRouter()
 
   def tearDown(self):
     pass

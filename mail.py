@@ -15,16 +15,16 @@ class MyMailRouter(MailRouter):
 
     self.add_route(
       sender    = ".*txt.voice.google.com",
-      callback  = lambda m: Prowl.add(application='GV', event=GVSMS(m).body)
+      callback  = lambda m: Prowl.add(application='GV', event=GVSMS(m).subject, description=GVSMS(m).body)
     )
 
     self.add_route(
       sender    = ".*voice-noreply@google.com",
-      callback  = lambda m: Prowl.add(application='GV', event=GVVM(m).body)
+      callback  = lambda m: Prowl.add(application='GV', event=GVVM(m).subject, description=GVVM(m).body)
     )
 
     self.add_route(
-      callback  = lambda m: Logger.log("%s -> %s: %s" % (m.sender, m.to, m.subject))
+      callback  = lambda m: Logger.log("Default Route :: %s -> %s: %s" % (m.sender, m.to, m.subject))
     )
 
 if __name__ == '__main__':
