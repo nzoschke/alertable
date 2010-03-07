@@ -1,42 +1,39 @@
-import logging
 import re
-import pdb
 
 class Parser(object):
+  # attr => regex map; if attr exists on message, named regex matches are merged into object
   regexes = {
-    'body':     '$^',
-    'subject':  '$^',
+    'to':       r'$(?P<to>)^',      # copy attrs over unchanged
+    'sender':   r'$(?P<sender>)^',
+    'subject':  r'$(?P<subject>)^',
+    'body':     r'$(?P<body>)^',
   }
   
   def __init__(self, inbound_message):
-    for attr_name in ('to', 'sender', 'subject', 'body'):
-      # parse field, and set to match if applicable
+    for attr_name in self.regexes:
       attr = unicode(getattr(inbound_message, attr_name))
       setattr(self, attr_name, attr)
-      #print "self.%s = %s" % (attr_name, attr)
-      
-      if self.regexes.has_key(attr_name):
-        p = re.compile(self.regexes[attr_name], re.S)
-        match = p.match(attr)
-        if not match:
-          continue
 
-        for name in match.groupdict():
-          setattr(self, name, match.groupdict()[name].strip())
-          #print "self.%s = %s" % (name, match.groupdict()[name].strip())
+      p = re.compile(self.regexes[attr_name], re.S)
+      match = p.match(attr)
+      if not match:
+        continue
+
+      for name in match.groupdict():
+        setattr(self, name, match.groupdict()[name].strip())
 
 class GVSMS(Parser):
   regexes = {
-    'body':     r'(From[^\n]+)?(?P<body>.*?)(\n\n--.*)?$', # Strip off `From nobody...` and GV SMS signature if present
-    'subject':  r'^(?P<subject>.*) \[',
+    'body':     r'(From[^\n]+)?(?P<body>.*?)(\n\n--.*)?$',  # Strip off `From nobody...` and GV SMS signature if present
+    'subject':  r'^(?P<subject>.*) \[',                     # Strip off [phone number]
   }
 
 class GVVM(Parser):
   regexes = {
-    'body':     '.*Transcript: (?P<body>.*)Play',  # extract part between Trascript: and Play message: text
-    'subject':  r'^New (?P<subject>.*) at',
+    'body':     r'.*Transcript: (?P<body>.*)Play',          # extract part between `Trascript:` and `Play message:`
+    'subject':  r'^New (?P<subject>.*) at',                 # Strip off time
   }
-  
+
   def __init__(self, inbound_message):
     super(GVVM, self).__init__(inbound_message)
     self.subject = self.subject[0].upper() + self.subject[1:] # capitalize first letter
