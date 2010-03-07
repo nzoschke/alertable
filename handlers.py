@@ -34,7 +34,7 @@ class MailRouter(InboundMailHandler):
 
   def add_route(self, callback, name=None, to=None, sender=None, subject=None, body=None):
     route = {'callback': callback}
-    route['name'] = name or callback.func_name
+    route['name'] = name or callback.func_name # only used for logging / debugging purposes
     if to:      route['to'] = re.compile(to)
     if sender:  route['sender'] = re.compile(sender)
     if subject: route['subject'] = re.compile(subject)
