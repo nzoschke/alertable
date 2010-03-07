@@ -7,11 +7,13 @@ ROUTED = {'to': [], 'sender': []}
 class MyMailRouter(MailRouter):
   def __init__(self):
     self.add_route(
+      name      = 'to exact',
       to        = 'prowl@mail-utils.appspotmail.com',
       callback  = lambda m: ROUTED['to'].append(m)
     )
 
     self.add_route(
+      name      = 'sender domain',
       sender    = '.*@txt.voice.google.com',
       callback  = lambda m: ROUTED['sender'].append(m)
     )
@@ -23,6 +25,7 @@ class TestMailRouter(unittest.TestCase):
   def test_gv_sms(self):
     self.mail_router.receive(EmailMessage(to='prowl@mail-utils.appspotmail.com',))
     self.mail_router.receive(EmailMessage(sender='noreply@txt.voice.google.com',))
+    self.mail_router.receive(EmailMessage(to='nobody@mail-utils.appspotmail.com',))
     self.assertEqual(1, len(ROUTED['to']))
     self.assertEqual(1, len(ROUTED['sender']))
 

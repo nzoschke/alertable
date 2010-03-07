@@ -6,9 +6,7 @@ class MainHandler(webapp.RequestHandler):
     self.response.out.write('Index')
 
 def main():
-  application = webapp.WSGIApplication([
-    ('/', MainHandler)
-  ], debug=True)
+  application = webapp.WSGIApplication([('/', MainHandler)], debug=True)
   util.run_wsgi_app(application)
 
 if __name__ == '__main__':

@@ -1,17 +1,8 @@
 import httplib
 import logging
 import urllib
-
 import settings
 
-class Logger(object):
-  messages = []
-  
-  @classmethod
-  def log(cls, message):
-    cls.messages.append(message)
-    logging.info(message)
-    
 class Prowl(object):
   HOST = 'prowl.weks.net'
   

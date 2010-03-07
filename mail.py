@@ -1,9 +1,12 @@
+import logging
 from google.appengine.ext import webapp 
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from handlers import MailRouter
-from rpc import Prowl, GoogleVoice, Logger
-from parsers import GVSMS, GVVM
+try:
+  from settings import MailRouter
+except ImportError, e:
+  logging.warning(e)
+  from handlers import MailRouter
 
 if __name__ == '__main__':
   application = webapp.WSGIApplication([MailRouter.mapping()], debug=True)
