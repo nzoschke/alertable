@@ -2,7 +2,9 @@ GAE Messaging Utils - Messaging (Email and XMPP) sending, receiving, routing and
 ========================================================
 
 git clone git://github.com/nzoschke/gae-message-utils.git
-Create a `settings.py` file:
+
+Create a `settings.py` file with your personal API tokens and routing rules:
+
     from handlers import MailRouter
     from parsers import GVSMS, GVVM
     from rpc import Prowl, GoogleVoice
