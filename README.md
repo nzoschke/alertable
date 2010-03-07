@@ -1,4 +1,5 @@
-GAE Messaging Utils - Messaging (Email and XMPP) sending, receiving, routing and callbacks for Google App Engine
+GAE Messaging Utils
+Messaging (Email and XMPP) receiving, routing and callbacks for Google App Engine
 ========================================================
 
 git clone git://github.com/nzoschke/gae-message-utils.git
@@ -45,4 +46,5 @@ Create a `settings.py` file with your personal API tokens and routing rules:
         )
         
         super(MailRouter, self).__init__() # add default route
-  
+
+Create a Google App Engine application, and deploy.
