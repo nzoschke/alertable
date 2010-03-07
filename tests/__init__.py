@@ -4,8 +4,7 @@ sys.path.append('/Applications/GoogleAppEngineLauncher.app/Contents/Resources/Go
 
 import unittest
 from tests.test_parsers import TestGVParsers
-from tests.test_router import TestMailRouter
+from tests.test_handlers import TestMailRouter
 
 if __name__ == '__main__':
-  #suite = unittest.TestLoader().loadTestsFromTestCase(TestGVParsers)
   unittest.main()
