@@ -3,7 +3,7 @@ import re
 class Parser(object):
   # attr => regex map; if attr exists on message, named regex matches are merged into object
   regexes = {
-    'to':       r'$(?P<to>)^',      # copy attrs over unchanged
+    'to':       r'$(?P<to>)^',      # copy attr over unchanged
     'sender':   r'$(?P<sender>)^',
     'subject':  r'$(?P<subject>)^',
     'body':     r'$(?P<body>)^',

@@ -7,7 +7,7 @@ class MailRouter(InboundMailHandler):
   
   def __init__(self):
     self.add_route(
-      callback  = lambda m: Logger.log("%s -> %s: %s" % (m.sender, m.to, m.subject)) # default route for debugging/testing
+      callback  = lambda m: Logger.log('Sender: %s\nTo: %s\nSubject: %s\nBody: %s' % (m.sender, m.to, m.subject, repr(unicode(m.body)))) # default route for debugging/testing
     )
 
   def receive(self, inbound_message):

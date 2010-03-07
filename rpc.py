@@ -16,13 +16,13 @@ class Prowl(object):
   HOST = 'prowl.weks.net'
   
   @classmethod
-  def add(cls, application, event, description=None, priority=0):
+  def add(cls, application, event, description='', priority=0):
     """Send a notification using the Prowl API"""
     data = urllib.urlencode({
       'apikey': settings.PROWL_API_KEY, 
       'application': application, 
       'event': event,
-      'description': description or '',
+      'description': description,
       'priority': priority, 
     })
 
@@ -37,7 +37,6 @@ class Prowl(object):
     data = response.read()
 
     return ('success' in data)
-
 
 class GoogleVoice(object):
   HOST = 'clients4.google.com'
