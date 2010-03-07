@@ -1,5 +1,4 @@
-GAE Messaging Utils
-Messaging (Email and XMPP) receiving, routing and callbacks for Google App Engine
+GAE Messaging Utils - Email receiving and routing to callbacks for Google App Engine
 ========================================================
 
 git clone git://github.com/nzoschke/gae-message-utils.git
