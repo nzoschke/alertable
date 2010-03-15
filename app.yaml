@@ -5,10 +5,14 @@ api_version: 1
 
 handlers:
 - url: /_ah/mail/.+
-  script: mail.py 
+  script: message.py
+
+- url: /_ah/xmpp/.+
+  script: message.py
 
 - url: .*
   script: main.py
 
 inbound_services:
 - mail
+- xmpp_message

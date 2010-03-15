@@ -1,9 +1,16 @@
 import logging
 import re
 
-from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
+from google.appengine.api import xmpp, mail
+from google.appengine.ext import webapp
 
-class MailRouter(InboundMailHandler):
+class XMPPMessage(xmpp.Message):
+  """
+  XMPP Message acts more like an EmailMessage
+  """
+  subject = ''
+
+class MessageRouter(webapp.RequestHandler):
   routes = []
 
   def __init__(self):
@@ -13,7 +20,12 @@ class MailRouter(InboundMailHandler):
       callback  = lambda m: logging.info('NO ROUTE\nSender: %s\nTo: %s\nSubject: %s\nBody: %s' % (m.sender, m.to, m.subject, repr(unicode(m.body)))) # default route for debugging/testing
     )
 
-  def receive(self, inbound_message):
+  def post(self):
+    # determine if Email or XMPP message
+    inbound_message = mail.InboundEmailMessage(self.request.body)
+    if not hasattr(inbound_message, 'sender'):
+      inbound_message = XMPPMessage(self.request.POST)
+
     for route in self.routes:
       logging.debug('Trying Route `%s`' % route['name'])
       match = False
