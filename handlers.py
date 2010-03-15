@@ -20,12 +20,7 @@ class MessageRouter(webapp.RequestHandler):
       callback  = lambda m: logging.info('NO ROUTE\nSender: %s\nTo: %s\nSubject: %s\nBody: %s' % (m.sender, m.to, m.subject, repr(unicode(m.body)))) # default route for debugging/testing
     )
 
-  def post(self):
-    # determine if Email or XMPP message
-    inbound_message = mail.InboundEmailMessage(self.request.body)
-    if not hasattr(inbound_message, 'sender'):
-      inbound_message = XMPPMessage(self.request.POST)
-
+  def receive(self, inbound_message):
     for route in self.routes:
       logging.debug('Trying Route `%s`' % route['name'])
       match = False
@@ -43,6 +38,13 @@ class MessageRouter(webapp.RequestHandler):
       if match:
         route['callback'](inbound_message)
         return True
+
+  def post(self):
+    # determine if Email or XMPP message
+    inbound_message = mail.InboundEmailMessage(self.request.body)
+    if not hasattr(inbound_message, 'sender'):
+      inbound_message = XMPPMessage(self.request.POST)
+    self.receive(inbound_message)
 
   def add_route(self, callback, name=None, to=None, sender=None, subject=None, body=None):
     route = {'callback': callback}

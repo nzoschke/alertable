@@ -6,7 +6,7 @@ import logging
 import unittest
 
 from tests.test_parsers import TestGVParsers
-from tests.test_handlers import TestMailRouter
+from tests.test_handlers import TestMessageRouter
 
 if __name__ == '__main__':
   #logging.basicConfig(level=logging.DEBUG)

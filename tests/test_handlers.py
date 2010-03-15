@@ -1,10 +1,10 @@
 import unittest
 from google.appengine.api.mail import EmailMessage
-from handlers import MailRouter
+import handlers
 
 ROUTED = {'to': [], 'sender': []}
 
-class MyMailRouter(MailRouter):
+class MessageRouter(handlers.MessageRouter):
   def __init__(self):
     self.add_route(
       name      = 'to exact',
@@ -18,14 +18,14 @@ class MyMailRouter(MailRouter):
       callback  = lambda m: ROUTED['sender'].append(m)
     )
 
-class TestMailRouter(unittest.TestCase):
+class TestMessageRouter(unittest.TestCase):
   def setUp(self):
-    self.mail_router = MyMailRouter()
+    self.message_router = MessageRouter()
 
   def test_gv_sms(self):
-    self.mail_router.receive(EmailMessage(to='prowl@mail-utils.appspotmail.com',))
-    self.mail_router.receive(EmailMessage(sender='noreply@txt.voice.google.com',))
-    self.mail_router.receive(EmailMessage(to='nobody@mail-utils.appspotmail.com',))
+    self.message_router.receive(EmailMessage(to='prowl@mail-utils.appspotmail.com',))
+    self.message_router.receive(EmailMessage(sender='noreply@txt.voice.google.com',))
+    self.message_router.receive(EmailMessage(to='nobody@mail-utils.appspotmail.com',))
     self.assertEqual(1, len(ROUTED['to']))
     self.assertEqual(1, len(ROUTED['sender']))
 
