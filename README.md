@@ -5,14 +5,14 @@ git clone git://github.com/nzoschke/gae-message-utils.git
 
 Create a `settings.py` file with your personal API tokens and routing rules:
 
-    from handlers import MailRouter
+    import handlers
     from parsers import GVSMS, GVVM
     from rpc import Prowl, GoogleVoice
 
     PROWL_API_KEY          = 'SECRET'
     GOOGLE_VOICE_BUTTON_ID = 'SECRET'
 
-    class MailRouter(MailRouter):
+		class MessageRouter(handlers.MessageRouter):
       def __init__(self):
         # specific SMS sources sent to prowl with static sender and higher priority
         self.add_route(
@@ -41,7 +41,7 @@ Create a `settings.py` file with your personal API tokens and routing rules:
           name      = 'Stand Up Notification',
           sender    = '.*calendar-notification@google.com',
           body      = 'Stand Up',
-          callback  = lambda m: GoogleVoice.connect('15551212')
+          callback  = lambda m: GoogleVoice.connect('15555551212')
         )
         
         super(MailRouter, self).__init__() # add default route
