@@ -40,8 +40,15 @@ class MessageRouter(webapp.RequestHandler):
         return True
 
   def post(self):
-    # determine if Email or XMPP message
+    # assume Email message first
     inbound_message = mail.InboundEmailMessage(self.request.body)
+
+    # prefer text body over html body
+    bodies = [b.decode() for (c, b) in inbound_message.bodies('text/plain')] + [b.decode() for (c, b) in inbound_message.bodies('text/html')]
+    if bodies:
+      inbound_message.body = bodies[0]
+
+    # if no sender, re-interpret as XMPP message
     if not hasattr(inbound_message, 'sender'):
       inbound_message = XMPPMessage(self.request.POST)
     self.receive(inbound_message)
