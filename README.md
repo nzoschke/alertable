@@ -12,7 +12,7 @@ Create a `settings.py` file with your personal API tokens and routing rules:
     PROWL_API_KEY          = 'SECRET'
     GOOGLE_VOICE_BUTTON_ID = 'SECRET'
 
-		class MessageRouter(handlers.MessageRouter):
+    class MessageRouter(handlers.MessageRouter):
       def __init__(self):
         # specific SMS sources sent to prowl with static sender and higher priority
         self.add_route(
