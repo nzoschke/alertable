@@ -1,5 +1,10 @@
 from google.appengine.api.mail import EmailMessage, InboundEmailMessage
 
+email = 'MIME-Version: 1.0\r\nDate: Sat, 20 Mar 2010 06:50:48 -0700\r\nFrom: from@example.com\r\nTo: to@example.com\r\nSubject: subject\r\nContent-Type: multipart/alternative; boundary=0RScTRi-9426741\r\n\r\n--0RScTRi-9426741\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\nbody\r\n--0RScTRi-9426741\r\nContent-Type: text/html; charset=UTF-8\r\n\r\nbody\r\n--0RScTRi-9426741--\r\n'
+email_no_subj = 'MIME-Version: 1.0\r\nDate: Sat, 20 Mar 2010 06:50:20 -0700\r\nFrom: from@example.com\r\nTo: to@example.com\r\nSubject: \r\nContent-Type: multipart/alternative; boundary=STS1Dt1-2728038\r\n\r\n--STS1Dt1-2728038\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\nbody\r\n--STS1Dt1-2728038\r\nContent-Type: text/html; charset=UTF-8\r\n\r\nbody\r\n--STS1Dt1-2728038--\r\n'
+xmpp = '--tiSIRtD-3125430\r\nContent-Disposition: form-data; name="to"\r\n\r\nto@example.com\r\n--tiSIRtD-3125430\r\nContent-Disposition: form-data; name="from"\r\n\r\nfrom@example.com\r\n--tiSIRtD-3125430\r\nContent-Disposition: form-data; name="body"\r\n\r\nbody\r\n--tiSIRtD-3125430\r\nContent-Disposition: form-data; name="stanza"\r\nContent-Type: text/xml\r\n\r\n<message from="from@example.com" to="to@example.com"><body>body</body></message>\r\n--tiSIRtD-3125430--\r\n'
+xmpp_no_body = '--IiScIS-512652\r\nContent-Disposition: form-data; name="to"\r\n\r\nto@example.com\r\n--IiScIS-512652\r\nContent-Disposition: form-data; name="from"\r\n\r\nfrom@example.com\r\n--IiScIS-512652\r\nContent-Disposition: form-data; name="body"\r\n\r\n\r\n--IiScIS-512652\r\nContent-Disposition: form-data; name="stanza"\r\nContent-Type: text/xml\r\n\r\n<message from="from@example.com" to="to@example.com"><body></body></message>\r\n--IiScIS-512652--\r\n'
+
 sms1 = InboundEmailMessage("""Delivered-To: joe@example.com
 Received: by 10.229.75.8 with SMTP id w8cs468682qcj;
        Sat, 27 Feb 2010 16:53:46 -0800 (PST)
