@@ -4,12 +4,6 @@ import re
 from google.appengine.api import xmpp, mail
 from google.appengine.ext import webapp
 
-class XMPPMessage(xmpp.Message):
-  """
-  XMPP Message acts more like an EmailMessage
-  """
-  subject = ''
-
 class MessageRouter(webapp.RequestHandler):
   routes = []
 
@@ -40,17 +34,21 @@ class MessageRouter(webapp.RequestHandler):
         return True
 
   def post(self):
-    # assume Email message first
-    inbound_message = mail.InboundEmailMessage(self.request.body)
+    # request should describe either an xmpp.Message or mail.InboundEmailMessage
+    # process, and assert that message has to, sender, subject and body properties
+    if self.request.POST.has_key('stanza'):
+      inbound_message = xmpp.Message(self.request.POST)
+      inbound_message.subject = ''
+    else:
+      inbound_message = mail.InboundEmailMessage(self.request.body)
+      if not hasattr(inbound_message, 'subject'):
+        super(mail._EmailMessageBase, inbound_message).__setattr__('subject', '') # bypass validation
 
-    # prefer text body over html body
-    bodies = [b.decode() for (c, b) in inbound_message.bodies('text/plain')] + [b.decode() for (c, b) in inbound_message.bodies('text/html')]
-    if bodies:
-      inbound_message.body = bodies[0]
+      # prefer text body over html body
+      bodies = [b.decode() for (c, b) in inbound_message.bodies('text/plain')] + [b.decode() for (c, b) in inbound_message.bodies('text/html')]
+      if bodies:
+        inbound_message.body = bodies[0]
 
-    # if no sender, re-interpret as XMPP message
-    if not hasattr(inbound_message, 'sender'):
-      inbound_message = XMPPMessage(self.request.POST)
     self.receive(inbound_message)
 
   def add_route(self, callback, name=None, to=None, sender=None, subject=None, body=None):
