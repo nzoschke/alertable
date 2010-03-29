@@ -42,7 +42,7 @@ class MessageRouter(webapp.RequestHandler):
     else:
       inbound_message = mail.InboundEmailMessage(self.request.body)
       if not hasattr(inbound_message, 'subject'):
-        super(mail._EmailMessageBase, inbound_message).__setattr__('subject', '') # bypass validation
+        super(mail._EmailMessageBase, inbound_message).__setattr__('subject', '') # bypass validation to assure property is set
 
       # prefer text body over html body
       bodies = [b.decode() for (c, b) in inbound_message.bodies('text/plain')] + [b.decode() for (c, b) in inbound_message.bodies('text/html')]

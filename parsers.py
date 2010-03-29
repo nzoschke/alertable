@@ -1,4 +1,5 @@
 import re
+from google.appengine.api import mail
 
 class Parser(object):
   # attr => regex map; if attr exists on message, named regex matches are merged into object
@@ -10,6 +11,12 @@ class Parser(object):
   }
   
   def __init__(self, inbound_message):
+    # properly parse email body
+    if isinstance(inbound_message, mail.EmailMessage):
+      bodies = [b.decode() for (c, b) in inbound_message.bodies('text/plain')] + [b.decode() for (c, b) in inbound_message.bodies('text/html')]
+      if bodies:
+        inbound_message.body = bodies[0]
+
     for attr_name in self.regexes:
       attr = unicode(getattr(inbound_message, attr_name))
       setattr(self, attr_name, attr)
