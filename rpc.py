@@ -1,3 +1,4 @@
+import base64
 import httplib
 import logging
 import urllib
@@ -54,3 +55,24 @@ class GoogleVoice(object):
     data = response.read()
 
     return ('ok=true' in data)
+
+class Campfire(object):
+  HOST = 'campfirenow.com'
+  
+  @classmethod
+  def speak(cls, subdomain, room_id, body):
+    data = '<message><body>%s</body></message>' % body
+    
+    headers = {
+      'Content-type': 'application/xml',
+      'Authorization': "Basic " + base64.b64encode(settings.CAMPFIRE_API_TOKEN + ':x')
+    }
+    
+    host = '%s.%s' % (subdomain, cls.HOST)
+    path = '/room/%s/speak.xml' % room_id
+    conn = httplib.HTTPSConnection(host)
+    conn.request('POST', path, data, headers)
+    response = conn.getresponse()
+    data = response.read()
+    
+    return ('message' in data)
