@@ -44,3 +44,8 @@ class GVVM(Parser):
   def __init__(self, inbound_message):
     super(GVVM, self).__init__(inbound_message)
     self.subject = self.subject[0].upper() + self.subject[1:] # capitalize first letter
+
+class PagerDuty(Parser):
+  regexes = {
+    'body': r'.*Description: (?P<body>.*?)\n'
+  }
